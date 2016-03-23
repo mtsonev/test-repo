@@ -1,2 +1,7 @@
-for i in range(9):
-    print i
+import random
+def DNA_random_seq(n):
+    nucleotide = ['A', 'G', 'T', 'C']
+    output = ''
+    for i in range(n):
+        output += random.choice(nucleotide)
+    return str(output)
