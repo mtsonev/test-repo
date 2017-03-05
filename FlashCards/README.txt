@@ -12,3 +12,5 @@ This is a work in progress, I plan to implement the ability to keep a record
 of how well you do on the different aspects of each question, but getting all
 of the information into the program (i.e., writing all of the flash
 cards) is my first priority.
+
+--Adam Laing
