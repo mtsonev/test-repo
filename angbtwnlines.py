@@ -1,42 +1,68 @@
-# Given three points at three different heights, calculate the angle between the
-#    lines drawn from the top point, to the middle, to the bottom
-#    and then draw the lines
+# Given the x, y, and z location of a particle in three places, calculate the 
+#   angle between the first two points and a detector in between the last two 
+#   points and between the path of the outgoing particle(s) and the plane
+#   then draw the path on a 3D plot
+
+# DETECTOR SETUP
+#    *             Incoming particle - Path vector denoted by I
+#   -----------    Top GEM - Beam location in this plane denoted by T
+#   -----------    Middle GEM - Beam location in this plane denoted by M
+#   -----------    Cherenkov Detector - Beam location in this plane denoted by D
+#   -----------    Bottom GEM - Beam location in this plane denoted by B
+#            *     Outgoing Particle - Path vector denoted by O
 
 import numpy as np
 import matplotlib as mpl
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
-# Set the heights
-z1 = 10
-z2 = 6
-z3 = 1
+# Set the information from GEMs
+Tx = 1.0
+Ty = 1.0
+Mx = 2.0
+My = 2.0
+Bx = 6.0
+By = 6.0
 
-# Get X and Y coordinates
-x1 = int(input("X coordinate of top point:"))
-y1 = int(input("Y coordinate of top point:"))
-x2 = int(input("X coordinate of middle point:"))
-y2 = int(input("Y coordinate of middle point:"))
-x3 = int(input("X coordinate of bottom point:"))
-y3 = int(input("Y coordinate of bottom point:"))
+# Set the knowns
+W1 = 5.0
+W2 = 5.0
+W3 = 2.5
+Bz = 0.0 
+Dz = Bz + W1
+Mz = Bz + W1 + W2
+Tz = Bz + W1 + W2 + W3
 
-# Get slopes of each line
-m1 = (y1 - y2) / (x1 - x2)             #Line 1 connects points 1 and 2
-m2 = (-1) * (y2 - y3) / (x2 - x3)      #Line 2 connects points 2 and 3
+# Create Incoming Vector I
+Ix = Mx - Tx
+Iy = My - Ty
+Iz = Mz - Tz
 
-# Calculate angle between line and horizontal
-ang1 = np.degrees(np.arctan(m1))
-ang2 = np.degrees(np.arctan(m2))
+#Calculate angle between Incoming Vector and detector plane in degrees
+I_Ang = -1.0 * np.degrees(np.arcsin( Iz / ( Ix**2 + Iy**2 + Iz**2 )**0.5 ))
+print("Ray's incoming angle: ", I_Ang)
 
-# Calculate angle between the two lines
-angtot = ang1 + ang2
-print("Angle between lines is {0}".format(angtot))
+#Calculate Dx and Dy
+slopex = (Mx - Tx) / (Mz - Tz)
+Dx = Tx + slopex * (Dz - Mz)
+slopey = (My - Ty) / (Mz - Ty)
+Dy = My + slopey * (Dz - Mz)
+print("The ray hits the detector at ({}, {}, {})".format(Dx, Dy, Dz))
+
+#Create Outgoing Vector with Dx, Dy, and Dz
+Ox = Bx - Dx
+Oy = By - Dy
+Oz = Bz - Dz
+
+#Calculate angle between Outgoing Vector and detector plane in degrees
+O_Ang = -1 * np.degrees(np.arcsin( Oz / ( Ox**2 + Oy**2 + Oz**2 )**0.5 ))
+print("Ray's outgoing angle: ", O_Ang)
 
 # Plot the points on a graph
 fig = plt.figure()
 ax = fig.gca(projection='3d')
-xpoints = [x1, x2, x3]
-ypoints = [y1, y2, y3]
-zpoints = [z1, z2, z3]
+xpoints = [Tx, Mx, Dx, Bx]
+ypoints = [Ty, My, Dy, By]
+zpoints = [Tz, Mz, Dz, Bz]
 ax.plot(xpoints, ypoints, zpoints)
 plt.show()
