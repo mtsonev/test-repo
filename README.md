@@ -8,3 +8,4 @@ This is MY first edit! (Jacob W. Brooks, III)
 
 Added script "redshift.py", when executed it prompts for wavelengths and calculates the astronomical redshift of an object.
 
+Trying out Github. MT
